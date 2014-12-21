@@ -15,11 +15,11 @@ public class ClassifiedVector {
     }
     
     public ClassifiedVector(String category, Vector vector) {
-        this.classification = new Classification(category, 1.0);
+        this.classification = new Classification(category);
         this.vector = vector;
     }
     
     public String toString() {
-    	return "\""+classification.category+"\", "+vector;
+    	return "\""+classification.getCategory()+"\", "+vector;
     }
 }

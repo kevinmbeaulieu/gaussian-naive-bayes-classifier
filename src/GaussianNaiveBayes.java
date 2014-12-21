@@ -55,7 +55,7 @@ public class GaussianNaiveBayes {
     	
     	Map<String, Integer> numInCategory = new HashMap<>();
     	for (ClassifiedVector entry : trainingDataset) {
-    		String category = entry.classification.category;
+    		String category = entry.classification.getCategory();
     		
     		Vector average = averages.get(category);
     		if (average == null) {
@@ -74,7 +74,7 @@ public class GaussianNaiveBayes {
     	}
     	
     	for (ClassifiedVector entry : trainingDataset) {
-    		String category = entry.classification.category;
+    		String category = entry.classification.getCategory();
     		Vector variance = variances.get(category);
     		if (variance == null) {
     			variance = Vector.getVectorWithSize(entry.vector.size());
@@ -118,9 +118,7 @@ public class GaussianNaiveBayes {
     		pV += pVGivenC * pC;
     	}
     	
-    	String maxScoreCategory = null;
-    	double maxScore = Double.NEGATIVE_INFINITY;
-    	
+    	Classification prediction = new Classification();
     	for (Map.Entry<String, Vector> entry : averages.entrySet()) {
     		String category = entry.getKey();
     		Vector categoryAverage = entry.getValue();
@@ -131,13 +129,10 @@ public class GaussianNaiveBayes {
     		double pCGivenV = pC * pVGivenC / pV;
     		double score = pCGivenV; // (If we did not need probabilities, pVGivenC would be sufficient)
     		
-    		if (score > maxScore) {
-    			maxScore = score;
-    			maxScoreCategory = category;
-    		}
+    		prediction.addCategory(category, score);
     	}
     	
-    	return new Classification(maxScoreCategory, maxScore);
+    	return prediction;
     }
     
     /**
